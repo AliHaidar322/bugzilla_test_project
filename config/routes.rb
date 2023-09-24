@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'bugs/index'
+  get 'bugs/new'
+  get 'bugs/create'
   root 'home#index'
   # devise_for :users
   devise_for :users, controllers: {
