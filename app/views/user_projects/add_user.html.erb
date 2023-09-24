@@ -1,0 +1,24 @@
+<table class="table table-striped transparent-table">
+  <thead class="thead-light">
+    <tr>
+      <th colspan="3" class= "text-center bold text-white bg-black">Users not included in the project</th>
+    </tr>
+    <tr>
+      <th>Name</th>
+      <th>Role</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.name %></td>
+        <td><%= user.user_type %></td>
+        <td>
+          <%= link_to "Add User", userprojects_add_to_project_path(id: @project.id,id1: user.id), class: "btn btn-secondary" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
