@@ -1,2 +1,35 @@
-<h1>Bugs#new</h1>
-<p>Find me in app/views/bugs/new.html.erb</p>
+<%= form_for [@project, @bug] do |form| %>
+  <div class="form-group">
+    <%= form.label :title, class: 'form-label' %>
+    <%= form.text_field :title, class: 'form-control' %>
+  </div>
+
+  <%= form.hidden_field :project_id, value: @project.id %>
+
+  <div class="form-group">
+    <%= form.label :description, class: 'form-label' %>
+    <%= form.text_area :description, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :screenshot, class: 'form-label' %>
+    <%= form.file_field :screenshot, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :deadline, class: 'form-label' %>
+    <%= form.date_field :deadline, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :bug_type, class: 'form-label' %>
+    <%= form.select :bug_type, ['bug', 'feature'], { prompt: 'Select Bug type' }, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :status, class: 'form-label' %>
+    <%= form.select :status, Bug.statuses.keys, {}, class: 'form-control' %>
+  </div>
+
+  <%= form.submit "Create Bug",class: "btn btn-primary" %>
+<% end %>
