@@ -28,10 +28,10 @@ class UserProjectsController < ApplicationController
       @user_project = UserProject.find_by(project_id: params[:id], user_id: params[:id1])
       authorize @user_project
       if @user_project.destroy
-        redirect_to root_path, notice: "Object deleted Succesfully."
+         redirect_to root_path, notice: "Object deleted Succesfully."
       else
         redirect_to userprojects_users_path, notice: "Object was not deleted."
-      end
+        end
     else
       redirect_to userprojects_users_path
     end
