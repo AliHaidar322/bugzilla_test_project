@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <style>
+        body {
+          background-image: url('<%= asset_path('background-2462434_1920.jpg') %>'); /* Replace 'your-image.jpg' with your image file path */
+          background-size: cover; 
+        }
+    </style>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
