@@ -1,18 +1,23 @@
 Rails.application.routes.draw do
-  get 'projects/index'
-  get 'projects/new'
-  get 'projects/create'
-  get 'bugs/index'
-  get 'bugs/new'
-  get 'bugs/create'
-  root 'home#index'
-  # devise_for :users
+  root "home#index"
+  resources :projects, except: :show do
+    resources :bugs
+  end
+
+  resources :bugs
   devise_for :users, controllers: {
-    sessions: 'users/sessions'
+    sessions: 'users/sessions',
+    registrations: 'users/registrations'
   }
 
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  get 'bugs/:id/assign', to: 'bugs#assign', as: 'bugs_assign'
+  get 'userprojects/:id/add_user', to: 'userprojects#add_user', as: 'userprojects_add_user'
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  get 'userprojects/:id/add_to_project', to: 'userprojects#add_to_project', as: 'userprojects_add_to_project'
+  get 'userprojects/:id/remove_from_project', to: 'userprojects#remove_from_project',
+                                              as: 'userprojects_remove_from_project'
+  get 'bugs/:id/edit_status', to: 'bugs#edit_status', as: 'bugs_edit_status'
+  patch 'bugs/:id/update_status', to: 'bugs#update_status', as: 'bugs_update_status'
+  get 'userprojects/:id/users', to: 'userprojects#users', as: 'userprojects_users'
+  get 'projects/:id/destroy', to: 'projects#destroy', as: 'projects_destroy'
 end
