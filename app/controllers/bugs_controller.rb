@@ -1,4 +1,6 @@
 class BugsController < ApplicationController
+  before_action :authenticate_user!
+
   def index
     @project = Project.find(params[:id])
     @bugs = @project.bugs

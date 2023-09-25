@@ -1,4 +1,5 @@
 class UserProjectsController < ApplicationController
+  before_action :authenticate_user!
   def add_to_project
     @user_project = UserProject.new(project_id: params[:id], user_id: params[:id1])
     authorize @user_project

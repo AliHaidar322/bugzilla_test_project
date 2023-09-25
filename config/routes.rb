@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  root "home#index"
   resources :projects, except: :show do
     resources :bugs
   end
@@ -9,7 +8,7 @@ Rails.application.routes.draw do
     sessions: 'users/sessions',
     registrations: 'users/registrations'
   }
-
+  root to: "home#index"
   get 'bugs/:id/assign', to: 'bugs#assign', as: 'bugs_assign'
   get 'userprojects/:id/add_user', to: 'userprojects#add_user', as: 'userprojects_add_user'
 
