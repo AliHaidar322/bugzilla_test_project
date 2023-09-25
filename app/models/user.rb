@@ -9,6 +9,6 @@ class User < ApplicationRecord
 
   enum user_type: { manager: 'manager', developer: 'developer', qa: 'qa' }
 
-  # validates :name, presence: true
-  # validates :user_type, presence: true
+  validates :name, presence: true
+  validates :user_type, presence: true
 end
