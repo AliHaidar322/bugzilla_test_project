@@ -1,3 +1,4 @@
+# BugsController handles the actions related to managing bugs in the application.
 class BugsController < ApplicationController
   before_action :authenticate_user!
 

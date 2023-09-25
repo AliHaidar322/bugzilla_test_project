@@ -30,6 +30,6 @@
     <%= form.label :status, class: 'form-label' %>
     <%= form.select :status, Bug.statuses.keys, {}, class: 'form-control' %>
   </div>
-
+  <br>
   <%= form.submit "Create Bug",class: "btn btn-primary" %>
 <% end %>

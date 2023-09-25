@@ -1,7 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark  mt-2" style="background-color: transparent;">
   <div class="container">
     <div class="d-flex justify-content-between align-items-center w-100">
-      <!-- Left-aligned items -->
       <div>
         <ul class="navbar-nav">
           <li class="nav-item <%= 'active' if current_page?(root_path)%>">
@@ -12,13 +11,9 @@
           </li>
         </ul>
       </div>
-
-      <!-- Center-aligned brand -->
       <div class="text-center">
         <%= link_to "Bugzilla", root_path, class: "navbar-brand" %>
       </div>
-
-      <!-- Right-aligned items -->
       <div>
         <ul class="navbar-nav">
           <% if user_signed_in? %>

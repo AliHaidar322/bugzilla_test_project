@@ -7,7 +7,7 @@
     <%= csp_meta_tag %>
     <style>
         body {
-          background-image: url('<%= asset_path('background-2462434_1920.jpg') %>'); /* Replace 'your-image.jpg' with your image file path */
+          background-image: url('<%= asset_path('background-2462434_1920.jpg') %>');
           background-size: cover; 
         }
     </style>
@@ -17,11 +17,13 @@
   </head>
 
   <body>
-    <%= render 'layouts/navbar' %>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-    <div class="container">
-      <%= yield %>
-    </div>
+    <div class= "container-fluid">
+      <%= render 'layouts/navbar' %>
+      <div class="container">
+        <p class="notice"><%= notice %></p>
+        <p class="alert"><%= alert %></p>
+        <%= yield %>
+      </div>
+    </div>  
   </body>
 </html>

@@ -1,3 +1,4 @@
+# ProjectController handles the actions related to managing projects in the application.
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
   def index

@@ -15,7 +15,7 @@
               <% if current_user.manager?%>
                 <%= link_to "Add User","user_projects/#{project.id}/add_user", class: "btn btn-primary" %>
                 <%= link_to "Edit Project", edit_project_path(id: project) ,class: "btn btn-primary" %>
-                <%= link_to "Delete Project", projects_destroy_path(project) , method: :delete ,  class: "btn btn-primary" %>
+                <%= link_to "Delete Project", project_path(id: project.id) ,  data: { turbo_method: :delete } ,  class: "btn btn-primary" %>
               <%end%> 
           </div>
           </div>
