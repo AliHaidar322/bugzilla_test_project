@@ -10,10 +10,10 @@
           <div class="card-body">
               <h5 class="card-title m-3"><%= project.name %></h5>
               <p class="card-text m-3"><%= project.description %></p>
-              <%= link_to "Users", "userprojects/#{project.id}/users", class: 'btn btn-primary'%>
+              <%= link_to "Users", "user_projects/#{project.id}/users", class: 'btn btn-primary'%>
               <%= link_to "Bugs", bugs_path(id: project.id) , class: "btn btn-primary" %>
               <% if current_user.manager?%>
-                <%= link_to "Add User","userprojects/#{project.id}/add_user", class: "btn btn-primary" %>
+                <%= link_to "Add User","user_projects/#{project.id}/add_user", class: "btn btn-primary" %>
                 <%= link_to "Edit Project", edit_project_path(id: project) ,class: "btn btn-primary" %>
                 <%= link_to "Delete Project", projects_destroy_path(project) , method: :delete ,  class: "btn btn-primary" %>
               <%end%> 

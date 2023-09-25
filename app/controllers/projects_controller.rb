@@ -49,9 +49,9 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     authorize @project
     if @project.update(project_params)
-      redirect_to root_path, notice: "Project updated Sccesfully"
+      redirect_to projects_path, notice: "Project updated Sccesfully"
     else
-      redirect_to root_path, notice: "Project not Updated"
+      redirect_to projects_path, notice: "Project not Updated"
     end
   end
 

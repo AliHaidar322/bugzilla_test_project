@@ -31,12 +31,12 @@ class BugsController < ApplicationController
     @bug = Bug.find(params[:id])
     authorize @bug
     puts @bug
-    if @bug.update(assigned_to: @user.id)
+    if @bug.update(assign_to: @user.id)
       flash[:notice] = 'Bug assigned successfully.'
     else
       flash[:alert] = 'Bug is not assigned.'
     end
-    redirect_to root_path
+    redirect_to projects_path
   end
 
   def edit_status

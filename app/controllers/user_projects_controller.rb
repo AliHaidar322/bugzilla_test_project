@@ -5,10 +5,10 @@ class UserProjectsController < ApplicationController
     authorize @user_project
     if @user_project.save
       flash[:success] = "User added to the project successfully."
-      redirect_to root_path
+      redirect_to user_projects_add_user_path
     else
       flash[:error] = "Failed to add user to the project."
-      render 'userprojects/user_edit'
+      redirect_to user_projects_add_user_path
     end
   end
 
@@ -29,12 +29,14 @@ class UserProjectsController < ApplicationController
       @user_project = UserProject.find_by(project_id: params[:id], user_id: params[:id1])
       authorize @user_project
       if @user_project.destroy
-         redirect_to root_path, notice: "Object deleted Succesfully."
+        flash[:success] = "Object deleted Succesfully."
+        redirect_to user_projects_users_path
       else
-        redirect_to userprojects_users_path, notice: "Object was not deleted."
-        end
+        flash[:error] = "Object was not deleted."
+        redirect_to user_projects_users_path
+      end
     else
-      redirect_to userprojects_users_path
+      redirect_to user_projects_users_path
     end
   end
 end
