@@ -1,35 +1,37 @@
 <%= form_for [@project, @bug] do |form| %>
+  <%= render 'layouts/errors', object: @bug %>
   <div class="form-group">
-    <%= form.label :title, class: 'form-label' %>
-    <%= form.text_field :title, class: 'form-control' %>
+    <%= form.label :title, class: 'form-label' do %>
+      Title <%= content_tag(:span, '*', class: 'required') %>
+    <% end %>
+    <%= form.text_field :title, class: 'form-control', required: true %>
   </div>
 
   <%= form.hidden_field :project_id, value: @project.id %>
 
   <div class="form-group">
-    <%= form.label :description, class: 'form-label' %>
-    <%= form.text_area :description, class: 'form-control' %>
+    <%= form.label :description, class: 'form-label'%>
+    <%= form.text_area :description, class: 'form-control'%>
   </div>
 
   <div class="form-group">
-    <%= form.label :screenshot, class: 'form-label' %>
-    <%= form.file_field :screenshot, class: 'form-control' %>
+    <%= form.label :screenshot, class: 'form-label'%>
+    <%= form.file_field :screenshot, class: 'form-control'%>
   </div>
 
   <div class="form-group">
-    <%= form.label :deadline, class: 'form-label' %>
-    <%= form.date_field :deadline, class: 'form-control' %>
-  </div>
+  <%= form.label :deadline, "Deadline" do %>
+    Deadline <%= content_tag(:span, '*', class: 'required') %>
+  <% end %>
+  <%= form.date_field :deadline, class: 'form-control', required: true, min: Date.today.to_s %>
+</div>
 
   <div class="form-group">
-    <%= form.label :bug_type, class: 'form-label' %>
-    <%= form.select :bug_type, ['bug', 'feature'], { prompt: 'Select Bug type' }, class: 'form-control' %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :status, class: 'form-label' %>
-    <%= form.select :status, Bug.statuses.keys, {}, class: 'form-control' %>
+    <%= form.label :bug_type, class: 'form-label' do %>
+      Bug Type <%= content_tag(:span, '*', class: 'required') %>
+    <% end %>
+    <%= form.select :bug_type, ['bug', 'feature'], { prompt: 'Select Bug type' }, class: 'form-control', required: true %>
   </div>
   <br>
-  <%= form.submit "Create Bug",class: "btn btn-primary" %>
+  <%= form.submit "Create Bug", class: "btn btn-primary" %>
 <% end %>

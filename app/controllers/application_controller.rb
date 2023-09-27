@@ -1,6 +1,7 @@
 # ApplicationController is the base controller class for your Rails application.
 # It provides common functionality and settings for all other controllers.
 class ApplicationController < ActionController::Base
+  before_action :authenticate_user!
   include Pundit::Authorization
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized

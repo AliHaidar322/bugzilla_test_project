@@ -1,6 +1,7 @@
 <h1>Edit Project</h1>
 
 <%= form_for @project, html: { class: "form" } do |f| %>
+  <%= render 'layouts/errors', object: @project %>
   <div class="form-group">
     <%= f.label :name, "Project Name" %>
     <%= f.text_field :name, class: "form-control", required: true %>

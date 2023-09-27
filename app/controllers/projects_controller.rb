@@ -1,15 +1,12 @@
-# ProjectController handles the actions related to managing projects in the application.
 class ProjectsController < ApplicationController
-  before_action :authenticate_user!
+  include ProjectConcern
+
   def index
-    if current_user.user_type == "qa"
+    if current_user.qa?
       @projects = Project.all
     else
       @projects = current_user.projects
-      if @projects.empty?
-        flash.now[:notice] = "You don't have any projects. Click below to create a new project."
-        @create_project_button = true
-      end
+      set_flash_if_no_projects
     end
   end
 
@@ -23,42 +20,39 @@ class ProjectsController < ApplicationController
     authorize @project
     current_user.projects << @project
     if @project.save
-      redirect_to projects_path, notice: 'Project created successfully.'
+      flash[:success] = 'Project created successfully.'
+      redirect_to projects_path
     else
-      render 'new'
+      flash[:alert] = 'There was an error creating the project.'
+      redirect_to projects_path
     end
+  end
+
+  def edit
+    authorize @project
+  end
+
+  def update
+    authorize @project
+
+    if @project.update(project_params)
+      flas[:success] = "Project updated successfully."
+    else
+      flas[:alert] = "Project not updated."
+    end
+    redirect_to projects_path
   end
 
   def destroy
     @project = Project.find(params[:id])
     authorize @project
     @project.bugs.destroy_all
-    if UserProject.where(project_id: params[:id]).destroy_all
+    if UserProject.destroy_related_to_project(@project.id)
       @project.destroy
-      redirect_to projects_path, notice: 'Project deleted successfully.'
+      flas[:success] = 'Project deleted successfully.'
     else
-      redirect_to projects_path, notice: 'Project not Deleted'
+      flas[:alert] = 'Project deleted successfully.'
     end
-  end
-
-  def edit
-    @project = Project.find(params[:id])
-    authorize @project
-  end
-
-  def update
-    @project = Project.find(params[:id])
-    authorize @project
-    if @project.update(project_params)
-      redirect_to projects_path, notice: "Project updated Sccesfully"
-    else
-      redirect_to projects_path, notice: "Project not Updated"
-    end
-  end
-
-  private
-
-  def project_params
-    params.require(:project).permit(:name, :description)
+    redirect_to projects_path
   end
 end
