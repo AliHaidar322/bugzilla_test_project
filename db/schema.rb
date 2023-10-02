@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_02_082119) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_25_054738) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -48,12 +48,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_082119) do
     t.string "bug_type", null: false
     t.integer "status", default: 0, null: false
     t.date "deadline", null: false
-    t.integer "assign_to"
+    t.bigint "assign_to_id"
     t.bigint "creator_id", null: false
     t.bigint "project_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "assign_to_id"
     t.index ["assign_to_id"], name: "index_bugs_on_assign_to_id"
     t.index ["creator_id"], name: "index_bugs_on_creator_id"
     t.index ["project_id"], name: "index_bugs_on_project_id"
@@ -61,7 +60,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_082119) do
 
   create_table "projects", force: :cascade do |t|
     t.string "name", null: false
-    t.string "description", null: false
+    t.text "description", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_projects_on_name", unique: true
@@ -72,8 +71,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_082119) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["project_id", "user_id"], name: "index_user_projects_on_project_id_and_user_id", unique: true
     t.index ["project_id"], name: "index_user_projects_on_project_id"
-    t.index ["user_id", "project_id"], name: "index_user_projects_on_user_id_and_project_id", unique: true
     t.index ["user_id"], name: "index_user_projects_on_user_id"
   end
 
@@ -88,6 +87,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_082119) do
     t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name", null: false

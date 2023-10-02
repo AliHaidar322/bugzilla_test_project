@@ -10,8 +10,9 @@ class Bug < ApplicationRecord
   validate :screenshot_content_type
   validates :title, presence: true, length: { minimum: 10 }
   validates :title,
-            format: { with: /\A(?=.*[a-zA-Z])[a-zA-Z0-9]+\z/,
+            format: { with: /\A.*[a-zA-Z].*\z/,
                       message: I18n.t('activerecord.errors.models.bug.attributes.title.invalid_format') }
+
   validates :deadline, presence: true
   validates :bug_type, presence: true
   validates :status, presence: true

@@ -2,7 +2,7 @@
 <div class="row">
   <% if @create_project_button && current_user.manager?%>
     <div class="alert alert-info">
-      <%= link_to "Create New Project", new_project_path, class: "btn btn-primary" %>
+      <%= link_to "Create New Project", new_project_path,data: {controller: 'project-model'}, class: "btn btn-primary" %>
     </div>
   <% end %>
   <% @projects.each do |project| %>

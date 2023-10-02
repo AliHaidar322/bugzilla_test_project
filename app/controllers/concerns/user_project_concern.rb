@@ -24,7 +24,7 @@ module UserProjectConcern
     @user_project = UserProject.find_by(project_id: params[:id], user_id: @user.id)
     authorize @user_project
   rescue ActiveRecord::RecordNotFound
-    flash[:alert] = "User or Project not found"
+    flash[:alert] = I18n.t('flash.no_record_found')
     redirect_to users_user_project_path
   end
 
@@ -36,9 +36,9 @@ module UserProjectConcern
     @user_project = UserProject.new(project_id: project_id, user_id: user_id)
     authorize @user_project
     if @user_project.save
-      flash[:success] = "Added successfully."
+      flash[:success] = I18n.t('flash.added_successfully')
     else
-      flash[:error] = "Error while adding user."
+      flash[:error] = I18n.t('flash.error_adding_user')
     end
   end
 end

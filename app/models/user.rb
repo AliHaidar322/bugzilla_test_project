@@ -4,7 +4,7 @@ class User < ApplicationRecord
   has_many :bugs, class_name: 'Bug', foreign_key: 'creator_id', inverse_of: :creator
 
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :trackable
+         :recoverable, :rememberable, :validatable, :trackable, :confirmable
 
   enum user_type: { manager: 0, developer: 1, qa: 2 }
 

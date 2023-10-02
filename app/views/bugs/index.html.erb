@@ -34,8 +34,8 @@
         </td>
         <td ><%= bug.bug_type %></td>
         <td >
-          <% if bug.assign_to%>
-            <%=bug.assign_to%>
+          <% if bug.assign_to_id%>
+            <%=bug.assign_to_id%>
           <% elsif current_user.developer? %>
             <%= link_to "Assign yourself", assign_bug_path(id: bug.id,project_id: @project.id),class: "btn btn-primary"%>
           <% else %>

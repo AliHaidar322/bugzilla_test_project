@@ -26,7 +26,7 @@ class BugsController < ApplicationController
   def assign
     @user = current_user
 
-    if @bug.update(assign_to: @user.id)
+    if @bug.update(assign_to_id: @user.id)
       flash[:success] = 'Bug assigned successfully.'
     else
       flash[:alert] = 'Bug is not assigned.'
