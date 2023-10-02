@@ -1,24 +1,44 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Bugzilla
+_________________________________________________________________________________________________________________________
 
-Things you may want to cover:
+Install
+_________________________________________________________________________________________________________________________
 
-* Ruby version
+install ruby version 2.7.2
+install rails version 7.0.8
+_________________________________________________________________________________________________________________________
 
-* System dependencies
+Dependencies
+_________________________________________________________________________________________________________________________
 
-* Configuration
+bundle 
+Devise Gem Used for Authentication
+Pundit Gem Added for Authorization
+_________________________________________________________________________________________________________________________
 
-* Database creation
+Database Creation
+_________________________________________________________________________________________________________________________
 
-* Database initialization
+Ensure Postgresql is installed 
+create user and password Replace username, password and host  with your's
+    in database.yml 
+run rails db:create
+_________________________________________________________________________________________________________________________
 
-* How to run the test suite
+Database Initialization
+_________________________________________________________________________________________________________________________
 
-* Services (job queues, cache servers, search engines, etc.)
+run rails db:migrate db:seed
 
-* Deployment instructions
+_________________________________________________________________________________________________________________________
 
-* ...
+Run rails s to start it on the local server
+
+Deploy
+_________________________________________________________________________________________________________________________
+
+install docker
+change host from localhost to db
+change username and password and DB_Name check ruby and rails version and run sudo compose up --build
