@@ -6,8 +6,5 @@ class BugPolicy < ApplicationPolicy
   def update_status?
     user.developer?
   end
-
-  def assign?
-    user.developer?
-  end
+  alias assign? update_status?
 end

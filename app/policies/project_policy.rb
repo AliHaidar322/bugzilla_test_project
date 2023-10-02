@@ -3,19 +3,8 @@ class ProjectPolicy < ApplicationPolicy
     user.manager?
   end
 
-  def create?
-    user.manager?
-  end
-
-  def edit?
-    update?
-  end
-
-  def update?
-    user.manager?
-  end
-
-  def destroy?
-    user.manager?
-  end
+  alias create? new?
+  alias edit? new?
+  alias update? new?
+  alias destroy? new?
 end
