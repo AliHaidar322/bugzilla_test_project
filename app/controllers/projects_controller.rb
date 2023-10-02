@@ -24,7 +24,7 @@ class ProjectsController < ApplicationController
       redirect_to projects_path
     else
       flash[:alert] = 'There was an error creating the project.'
-      redirect_to projects_path
+      render :new, status: :unprocessable_entity, headers: { turbolinks_visit: request.url }
     end
   end
 
@@ -36,11 +36,12 @@ class ProjectsController < ApplicationController
     authorize @project
 
     if @project.update(project_params)
-      flas[:success] = "Project updated successfully."
+      flash[:success] = "Project updated successfully."
+      redirect_to projects_path
     else
-      flas[:alert] = "Project not updated."
+      flash[:alert] = "Project not updated."
+      render 'edit'
     end
-    redirect_to projects_path
   end
 
   def destroy
@@ -49,9 +50,9 @@ class ProjectsController < ApplicationController
     @project.bugs.destroy_all
     if UserProject.destroy_related_to_project(@project.id)
       @project.destroy
-      flas[:success] = 'Project deleted successfully.'
+      flash[:success] = 'Project deleted successfully.'
     else
-      flas[:alert] = 'Project deleted successfully.'
+      flash[:alert] = 'Project deleted successfully.'
     end
     redirect_to projects_path
   end

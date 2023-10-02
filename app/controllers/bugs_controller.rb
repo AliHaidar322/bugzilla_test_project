@@ -13,12 +13,13 @@ class BugsController < ApplicationController
     @bug = Bug.new(bug_params)
     @bug.creator = current_user
     authorize @bug
+
     if @bug.save
       flash[:success] = 'Bug added successfully.'
       redirect_to bugs_path(project_id: @project.id)
     else
       flash[:alert] = 'Bug not added.'
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -43,7 +44,7 @@ class BugsController < ApplicationController
       redirect_to projects_path
     else
       flash[:alert] = 'Failed to update bug status.'
-      render :edit_status
+      render :edit_status, status: :unprocessable_entity
     end
   end
 end

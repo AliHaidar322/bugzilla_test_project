@@ -1,5 +1,6 @@
 import { Application } from "@hotwired/stimulus"
 
+//= require turbolinks
 const application = Application.start()
 
 // Configure Stimulus development experience

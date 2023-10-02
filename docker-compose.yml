@@ -17,7 +17,7 @@ services:
     build: .
     command: "./bin/rails server"
     environment:
-      - POSTGRES_HOST=db
+      - POSTGRES_HOST=localhost
       - POSTGRES_DB=bugzilla_production
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=test123

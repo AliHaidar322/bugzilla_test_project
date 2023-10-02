@@ -4,7 +4,9 @@ module ProjectConcern
   extend ActiveSupport::Concern
 
   included do
+    # rubocop:disable Rails/LexicallyScopedActionFilter
     before_action :find_project, only: [:destroy, :edit, :update]
+    # rubocop:enable Rails/LexicallyScopedActionFilter
     rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
   end
 
@@ -19,14 +21,15 @@ module ProjectConcern
   end
 
   def handle_record_not_found
-    flash[:alert] = 'Project not found'
+    flash[:alert] = I18n.t('flash.no_project_found')
     redirect_to projects_path
   end
 
   def set_flash_if_no_projects
     return unless @projects.empty?
 
-    flash.now[:notice] = "You don't have any projects. Click below to create a new project."
+    flash.now[:notice] = I18n.t('flash.you_have_no_project')
+
     @create_project_button = true
   end
 end

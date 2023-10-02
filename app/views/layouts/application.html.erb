@@ -26,6 +26,7 @@
         <div class="alert alert-<%= key %>"><%= message %></div>
       <% end %>
       <%= yield %>
+      <%= turbo_frame_tag 'remote_modal'%>
     </div>
   </div>  
   </body>

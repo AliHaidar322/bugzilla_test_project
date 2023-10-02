@@ -7,6 +7,6 @@ class UserProject < ApplicationRecord
   }
 
   def self.check_if_user_added_before?(user_id, project_id)
-    where(user_id: user_id, project_id: project_id)
+    find_by(user_id: user_id, project_id: project_id)
   end
 end
