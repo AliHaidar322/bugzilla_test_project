@@ -1,0 +1,10 @@
+@import "bootstrap";
+
+.transparent-table {
+    background-color: transparent !important;
+  }
+  
+  .transparent-table th,
+  .transparent-table td {
+    background-color: rgba(255, 255, 255, 0.1) !important; /* Adjust the alpha value for transparency */
+  }

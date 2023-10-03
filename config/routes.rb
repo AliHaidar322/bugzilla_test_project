@@ -1,6 +1,29 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  resources :projects, except: :show do
+    resources :bugs
+  end
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  resources :bugs do
+    member do
+      get 'edit_status', to: 'bugs#edit_status', as: 'edit_status'
+      get 'assign', to: 'bugs#assign', as: 'assign'
+      patch 'update_status', to: 'bugs#update_status', as: 'update_status'
+    end
+  end
+
+  resources :user_projects, only: [] do
+    member do
+      get 'add_user'
+      get 'add_to_project'
+      get 'remove_from_project'
+      get 'users'
+    end
+  end
+
+  devise_for :users, controllers: {
+    sessions: 'users/sessions',
+    registrations: 'users/registrations'
+  }
+  root to: "home#index"
+  delete 'projects/:id', to: 'projects#destroy', as: 'project_destroy'
 end

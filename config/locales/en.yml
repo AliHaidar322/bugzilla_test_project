@@ -31,3 +31,21 @@
 
 en:
   hello: "Hello world"
+  flash:
+    no_project_found: 'No Project Found'
+    no_bug_found: 'No Bug Found'
+    no_record_found: 'No Record Found'
+    you_have_no_project: "You have no Project. Click below to create a project if you are a manager or request your manager."
+    added_successfully: "User Added Successfully"
+    error_adding_user: "Error While Adding User"
+  activerecord:
+    errors:
+      models:
+        bug:
+          attributes:
+            title:
+              invalid_format: "should contain at least one letter"
+        project:
+          attributes:
+            name:
+              invalid_format: "should contain at least one letter"

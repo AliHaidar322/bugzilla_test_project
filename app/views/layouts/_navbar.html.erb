@@ -1,0 +1,35 @@
+<nav class="navbar navbar-expand-lg navbar-dark  mt-2" style="background-color: transparent;">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <div>
+        <ul class="navbar-nav">
+          <li class="nav-item <%= 'active' if current_page?(root_path)%>">
+            <%= link_to "Home", root_path, class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Projects", projects_path, class: "nav-link" %>
+          </li>
+        </ul>
+      </div>
+      <div class="text-center">
+        <%= link_to "Bugzilla", root_path, class: "navbar-brand" %>
+      </div>
+      <div>
+        <ul class="navbar-nav">
+          <% if user_signed_in? %>
+            <li>
+              <%= link_to "Signout", destroy_user_session_path, data: { turbo_method: :delete }, class: "nav-link" %>
+            </li>
+          <% else %>
+            <li>
+              <%= link_to "Signup", new_user_registration_path, class: "glyphicon glyphicon-user nav-link" %>
+            </li>
+            <li>
+              <%= link_to "Login", new_user_session_path, class: "glyphicon glyphicon-log-in nav-link" %>
+            </li> 
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
