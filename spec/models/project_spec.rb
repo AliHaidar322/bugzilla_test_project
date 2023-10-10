@@ -1,5 +1,4 @@
 require 'rails_helper'
-require_relative 'support/database_cleaner'
 
 RSpec.describe Project do
   describe "when creating project" do

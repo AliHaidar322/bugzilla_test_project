@@ -1,5 +1,4 @@
 require 'rails_helper'
-require_relative 'support/database_cleaner'
 
 RSpec.describe Bug do
   describe "when creating bug" do

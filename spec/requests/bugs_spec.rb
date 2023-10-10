@@ -1,6 +1,4 @@
 require 'rails_helper'
-require_relative 'support/database_cleaner'
-
 RSpec.describe "Bugs" do
   let(:user) { create(:user) }
   let(:project) { create(:project) }

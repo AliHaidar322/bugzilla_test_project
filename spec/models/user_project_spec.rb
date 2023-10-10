@@ -1,5 +1,4 @@
 require 'rails_helper'
-require_relative 'support/database_cleaner'
 
 RSpec.describe UserProject do
   describe "When User Added to a Project" do
