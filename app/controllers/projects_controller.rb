@@ -21,7 +21,10 @@ class ProjectsController < ApplicationController
     current_user.projects << @project
     if @project.save
       flash[:success] = 'Project created successfully.'
-      redirect_to projects_path
+      respond_to do |format|
+        format.html { redirect_to projects_path }
+        format.turbo_stream
+      end
     else
       flash[:alert] = 'There was an error creating the project.'
       render :new, status: :unprocessable_entity, headers: { turbolinks_visit: request.url }
@@ -40,7 +43,7 @@ class ProjectsController < ApplicationController
       redirect_to projects_path
     else
       flash[:alert] = "Project not updated."
-      render 'edit'
+      render 'edit', status: :unprocessable_entity
     end
   end
 
@@ -48,7 +51,8 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     authorize @project
     @project.bugs.destroy_all
-    if UserProject.destroy_related_to_project(@project.id)
+    @user_projects = UserProject.return_related_to_project(@project.id)
+    if @user_projects.destroy_all
       @project.destroy
       flash[:success] = 'Project deleted successfully.'
     else
