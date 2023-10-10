@@ -42,6 +42,7 @@ end
 
 group :test do
   gem "capybara"
+  gem 'database_cleaner-active_record'
   gem "selenium-webdriver"
   gem "webdrivers"
 end
@@ -57,3 +58,5 @@ gem 'active_storage_validations'
 gem 'byebug'
 
 gem 'turbolinks'
+
+gem "rails-controller-testing", "~> 1.0"

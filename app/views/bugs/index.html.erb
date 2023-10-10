@@ -37,7 +37,7 @@
           <% if bug.assign_to_id%>
             <%=bug.assign_to_id%>
           <% elsif current_user.developer? %>
-            <%= link_to "Assign yourself", assign_bug_path(id: bug.id,project_id: @project.id),class: "btn btn-primary"%>
+            <%= link_to "Assign yourself", assign_bug_path(id: bug.id,project_id: @project.id), data: { turbo_method: :patch },class: "btn btn-primary"%>
           <% else %>
             <p>Nobody has assign himself</p>
           <% end %>
