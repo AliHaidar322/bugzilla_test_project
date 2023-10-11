@@ -6,23 +6,36 @@ RSpec.describe "Bugs" do
 
   before { sign_in user }
 
-  describe "GET /bugs" do
-    it "works! (now write some real specs)" do
+  describe "GET /bugs/index" do
+    it "shows bugs related to the project when the user is signed in" do
       get project_bugs_path(project.id)
+      expect(response).to have_http_status(:success)
+      expect(project.bugs).to include(bug)
+    end
 
-      expect(response).to have_http_status(:ok)
+    it "redirects to sign-in when the user is not signed in" do
+      sign_out user
+      get project_bugs_path(project.id)
+      expect(response).to redirect_to(new_user_session_path)
+      follow_redirect!
+      expect(response).to have_http_status(:success)
+      expect(response.body).to render_template("devise/sessions/new")
     end
   end
 
   describe 'GET /bugs/new' do
-    it 'returns a successful response' do
-      get new_project_bug_path(project)
-      expect(response).to have_http_status(:success)
-    end
-
-    it 'renders the new template' do
+    it 'renders the new template when user signed in' do
       get new_project_bug_path(project)
       expect(response).to render_template(:new)
+    end
+
+    it 'does not renders the new template when user signed out' do
+      sign_out user
+      get new_project_bug_path(project)
+      expect(response).to redirect_to(new_user_session_path)
+      follow_redirect!
+      expect(response).to have_http_status(:success)
+      expect(response.body).to render_template("devise/sessions/new")
     end
   end
 
@@ -55,7 +68,8 @@ RSpec.describe "Bugs" do
   end
 
   describe 'PATCH /bugs/:id/assign' do
-    let(:user) { create(:user, :developer)}
+    let(:user) { create(:user, :developer) }
+
     it 'assigns the bug to the current user' do
       patch assign_bug_path(bug)
 
@@ -86,7 +100,8 @@ RSpec.describe "Bugs" do
     let(:user) { create(:user, :developer) }
     let(:new_status) { :resolved }
     let(:valid_status_params) { { status: new_status } }
-    it 'updates the bug status ' do
+
+    it 'updates the bug status' do
       patch update_status_bug_path(bug), params: { bug: valid_status_params }
 
       expect(response).to have_http_status(:redirect)
