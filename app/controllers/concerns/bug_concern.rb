@@ -8,6 +8,7 @@ module BugConcern
     # rubocop:enable Rails/LexicallyScopedActionFilter
     rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
   end
+  
 
   private
 

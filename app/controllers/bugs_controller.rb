@@ -13,7 +13,6 @@ class BugsController < ApplicationController
     @bug = Bug.new(bug_params)
     @bug.creator = current_user
     authorize @bug
-
     if @bug.save
       flash[:success] = 'Bug added successfully.'
       redirect_to bugs_path(project_id: @project.id)

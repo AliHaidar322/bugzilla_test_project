@@ -27,9 +27,13 @@ gem "sassc-rails"
 
 group :development, :test do
   gem "debug", platforms: %i[mri mingw x64_mingw]
+  gem "factory_bot_rails"
+  gem "faker"
+  gem "rspec-rails"
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
+  gem 'simplecov'
 end
 
 group :development do
@@ -39,6 +43,7 @@ end
 
 group :test do
   gem "capybara"
+  gem 'database_cleaner-active_record'
   gem "selenium-webdriver"
   gem "webdrivers"
 end
@@ -54,3 +59,5 @@ gem 'active_storage_validations'
 gem 'byebug'
 
 gem 'turbolinks'
+
+gem "rails-controller-testing", "~> 1.0"

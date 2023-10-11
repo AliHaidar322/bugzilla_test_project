@@ -8,7 +8,7 @@ class User < ApplicationRecord
 
   enum user_type: { manager: 0, developer: 1, qa: 2 }
 
-  validates :name, presence: true
+  validates :name, presence: true, length: { maximum: 50 }
   validates :user_type, presence: true
 
   scope :non_manager_users_except_project, lambda { |project_id|

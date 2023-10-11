@@ -5,8 +5,9 @@ Rails.application.routes.draw do
 
   resources :bugs do
     member do
+      get '/bugs', to: 'bugs#index'
       get 'edit_status', to: 'bugs#edit_status', as: 'edit_status'
-      get 'assign', to: 'bugs#assign', as: 'assign'
+      patch 'assign', to: 'bugs#assign', as: 'assign'
       patch 'update_status', to: 'bugs#update_status', as: 'update_status'
     end
   end
@@ -20,10 +21,11 @@ Rails.application.routes.draw do
     end
   end
 
-  devise_for :users, controllers: {
-    sessions: 'users/sessions',
-    registrations: 'users/registrations'
-  }
+  devise_for :users
+  # devise_for :users, controllers: {
+  #   sessions: 'users/sessions',
+  #   registrations: 'users/registrations'
+  # }
   root to: "home#index"
   delete 'projects/:id', to: 'projects#destroy', as: 'project_destroy'
 end
