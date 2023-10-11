@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "Projects" do
-  let(:user) { create(:user, :manager)}
+  let(:user) { create(:user, :manager) }
   let(:project) { create(:project) }
 
   before { sign_in user }
@@ -59,7 +59,7 @@ RSpec.describe "Projects" do
         description: Faker::Lorem.sentence(word_count: 15) [0..99]
       }
 
-      post projects_path, params: { project: project_params}
+      post projects_path, params: { project: project_params }
 
       expect(Project.find_by(name: project_params[:name])).to be_present
     end
@@ -76,6 +76,7 @@ RSpec.describe "Projects" do
       expect(response).to render_template(:edit)
     end
   end
+
   describe 'PATCH /projects/:id' do
     context 'with valid parameters' do
       it 'updates the project' do
@@ -102,7 +103,7 @@ RSpec.describe "Projects" do
   describe 'DELETE /projects/:id' do
     it 'deletes the project' do
       delete project_path(project)
-      expect(Project.exists?(project.id)).to be_falsey
+      expect(Project).not_to exist(project.id)
       expect(response).to redirect_to(projects_path)
     end
   end

@@ -3,31 +3,65 @@
 require 'rails_helper'
 
 RSpec.describe User do
-  describe 'when creating user' do
-    let(:user) { create(:user) }
+  let(:user) { create(:user) }
 
-    it 'validate user' do
+  describe "when creating user" do
+    it "validates presence of name" do
+      user = build(:user, name: nil)
+      expect(user.valid?).to be(false)
+      expect(user.errors[:name]).to include("can't be blank")
+    end
+
+    it "allows a user with name present" do
+      user = build(:user, name: "Not Nil Name")
       expect(user.valid?).to be(true)
     end
 
-    it 'has many user_projects' do
-      expect(user).to respond_to(:user_projects)
+    it "validates maximum length of name" do
+      user = build(:user, name: Faker::Lorem.sentence(word_count: 50))
+      expect(user.valid?).to be(false)
+      expect(user.errors[:name]).to include("is too long (maximum is 50 characters)")
     end
 
-    it 'has many projects through user_projects' do
-      expect(user).to respond_to(:projects)
+    it "allows a user having maximum 50 letters" do
+      user = build(:user, name: "Ali Haidar")
+      expect(user.valid?).to be(true)
     end
 
-    it 'has many bugs as a creator' do
-      expect(user).to respond_to(:bugs)
+    it "validates for presence of user_type" do
+      user = build(:user, user_type: nil)
+      expect(user.valid?).to be(false)
+      expect(user.errors[:user_type]).to include("can't be blank")
+    end
+
+    it "allows a user with user_type present" do
+      user = build(:user, user_type: :manager)
+      expect(user.valid?).to be(true)
+    end
+  end
+
+  describe "user_type enum" do
+    it "does not allow values other than [:manager, :developer, :qa]" do
+      user = build(:user)
+      begin
+        user.user_type = :invalid_user
+        user.save!
+      rescue ArgumentError => e
+        expect(e.message).to eq("'invalid_user' is not a valid user_type")
+      end
+    end
+
+    it "allows values [:manager, :developer, :qa]" do
+      user.user_type = :manager
+      expect(user).to be_valid
     end
   end
 
   describe 'scopes' do
     it 'returns non-manager users except those associated with a specific project' do
-      manager = create(:user, user_type: 'manager')
+      manager = build(:user, user_type: 'manager')
       non_manager = create(:user, user_type: 'developer')
-      project = create(:project)
+      project = build(:project)
       project.users << manager
 
       expect(non_manager.projects).not_to include(project)
@@ -36,6 +70,26 @@ RSpec.describe User do
 
       expect(users).to include(non_manager)
       expect(users).not_to include(manager)
+    end
+
+    it "excludes manager users assigned to the project" do
+      project = build(:project)
+      user = build(:user, user_type: 'manager')
+      create(:user_project, user: user, project: project)
+
+      result = described_class.non_manager_users_except_project(project.id)
+
+      expect(result).not_to include(user)
+    end
+
+    it "excludes non-manager users assigned to the project" do
+      project = build(:project)
+      user = build(:user, user_type: :developer)
+      build(:user_project, user: user, project: project)
+
+      result = described_class.non_manager_users_except_project(project.id)
+
+      expect(result).not_to include(user)
     end
   end
 end

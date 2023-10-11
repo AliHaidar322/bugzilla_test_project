@@ -33,6 +33,7 @@ group :development, :test do
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
+  gem 'shoulda-matchers'
   gem 'simplecov'
 end
 
