@@ -10,6 +10,7 @@ class User < ApplicationRecord
 
   validates :name, presence: true, length: { maximum: 50 }
   validates :user_type, presence: true
+  validates :user_type, inclusion: { in: user_types.keys }
 
   scope :non_manager_users_except_project, lambda { |project_id|
     where.not(user_type: 'manager')

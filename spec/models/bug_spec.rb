@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Bug do
   let(:bug) { create(:bug, status: nil, description: nil) }
@@ -70,7 +70,7 @@ RSpec.describe Bug do
   describe "making associations" do
     it "belongs to a creator, which is a User with an inverse association" do
       expect(described_class.reflect_on_association(:creator).macro).to eq(:belongs_to)
-      expect(described_class.reflect_on_association(:creator).class_name).to eq('User')
+      expect(described_class.reflect_on_association(:creator).class_name).to eq("User")
       expect(described_class.reflect_on_association(:creator).options[:inverse_of]).to eq(:bugs)
     end
 
@@ -107,17 +107,17 @@ RSpec.describe Bug do
     end
 
     it "does not change status if it's explicitly set" do
-      bug = build(:bug, status: 'started')
-      expect(bug.status).not_to eq('initiated')
+      bug = build(:bug, status: "started")
+      expect(bug.status).not_to eq("initiated")
     end
 
     it "sets description to 'No Description' if not present" do
-      expect(bug.description).to eq('No Description')
+      expect(bug.description).to eq("No Description")
     end
 
     it "does not change description if it's explicitly set" do
-      bug = build(:bug, description: 'Custom Description')
-      expect(bug.description).not_to eq('No Description')
+      bug = build(:bug, description: "Custom Description")
+      expect(bug.description).not_to eq("No Description")
     end
   end
 
@@ -128,13 +128,19 @@ RSpec.describe Bug do
     end
 
     it "does not perform any action when the screenshot is of the correct content type (JPEG)" do
-      bug = build(:bug, screenshot: Rack::Test::UploadedFile.new('spec/factories/images/image.jpg', 'image/jpeg'))
+      bug = build(:bug, screenshot: Rack::Test::UploadedFile.new("spec/factories/images/image.jpg", "image/jpeg"))
       expect { bug.save! }.not_to raise_error
     end
 
     it "does not perform any action when the screenshot is of the correct content type (GIF)" do
-      bug = build(:bug, screenshot: Rack::Test::UploadedFile.new('spec/factories/images/image.jpg', 'image/gif'))
+      bug = build(:bug, screenshot: Rack::Test::UploadedFile.new("spec/factories/images/image.jpg", "image/gif"))
       expect { bug.save! }.not_to raise_error
+    end
+
+    it "does not add an error" do
+      bug = build(:bug, screenshot: Rack::Test::UploadedFile.new("spec/factories/images/Oval.png", "image/png"))
+      expect(bug.save).to be(false)
+      expect(bug.errors[:screenshot]).to include("has an invalid content type")
     end
   end
 end

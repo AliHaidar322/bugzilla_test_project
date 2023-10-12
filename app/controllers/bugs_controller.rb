@@ -7,6 +7,7 @@ class BugsController < ApplicationController
   def new
     @project = Project.find(params[:project_id])
     @bug = Bug.new
+    authorize @bug
   end
 
   def create

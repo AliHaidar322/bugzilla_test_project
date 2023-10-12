@@ -15,15 +15,9 @@ class Bug < ApplicationRecord
 
   validates :deadline, presence: true
   validates :bug_type, presence: true
+  validates :screenshot, content_type: ["image/gif", "image/jpeg"]
 
   private
-
-  def screenshot_content_type
-    return unless screenshot.attached? && !screenshot.content_type.in?(%w[image/png image/gif])
-
-    screenshot.purge
-    errors.add(:screenshot, 'must be a PNG or GIF image')
-  end
 
   def set_initial_status
     return if status.present?
