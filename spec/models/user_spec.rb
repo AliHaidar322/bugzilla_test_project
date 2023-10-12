@@ -42,13 +42,8 @@ RSpec.describe User do
 
   describe "user_type enum" do
     it "does not allow values other than [:manager, :developer, :qa]" do
-      user = build(:user)
-      begin
-        user.user_type = :invalid_user
-        user.save!
-      rescue ArgumentError => e
-        expect(e.message).to eq("'invalid_user' is not a valid user_type")
-      end
+      expect { build(:user, user_type: :invalid) }.to raise_error(ArgumentError)
+        .with_message(/is not a valid user_type/)
     end
 
     it "allows values [:manager, :developer, :qa]" do

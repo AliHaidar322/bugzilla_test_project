@@ -18,8 +18,8 @@ class ProjectsController < ApplicationController
   def create
     @project = current_user.projects.build(project_params)
     authorize @project
-    current_user.projects << @project
     if @project.save
+      current_user.projects << @project
       flash[:success] = 'Project created successfully.'
       respond_to do |format|
         format.html { redirect_to projects_path }
@@ -27,7 +27,7 @@ class ProjectsController < ApplicationController
       end
     else
       flash[:alert] = 'There was an error creating the project.'
-      render :new, status: :unprocessable_entity, headers: { turbolinks_visit: request.url }
+      render turbo_stream: :new, status: :unprocessable_entity, headers: { turbolinks_visit: request.url }
     end
   end
 
@@ -56,7 +56,7 @@ class ProjectsController < ApplicationController
       @project.destroy
       flash[:success] = 'Project deleted successfully.'
     else
-      flash[:alert] = 'Project deleted successfully.'
+      flash[:alert] = 'Project not deleted!.'
     end
     redirect_to projects_path
   end

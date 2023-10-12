@@ -136,5 +136,11 @@ RSpec.describe Bug do
       bug = build(:bug, screenshot: Rack::Test::UploadedFile.new('spec/factories/images/image.jpg', 'image/gif'))
       expect { bug.save! }.not_to raise_error
     end
+
+    it 'does not add an error' do
+      bug = build(:bug, screenshot: Rack::Test::UploadedFile.new('spec/factories/images/Oval.png', 'image/png'))
+      expect(bug.save).to be(false)
+      expect(bug.errors[:screenshot]).to include("has an invalid content type")
+    end
   end
 end

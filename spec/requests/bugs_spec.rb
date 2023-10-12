@@ -1,6 +1,6 @@
 require 'rails_helper'
 RSpec.describe "Bugs" do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, :qa) }
   let(:project) { create(:project) }
   let(:bug) { create(:bug, project: project) }
 
@@ -37,6 +37,13 @@ RSpec.describe "Bugs" do
       expect(response).to have_http_status(:success)
       expect(response.body).to render_template("devise/sessions/new")
     end
+
+    it 'checks authoriztion for new' do
+      user = build(:user, :developer)
+      sign_in user
+      get new_project_bug_path(project)
+      expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+    end
   end
 
   describe 'POST /bugs' do
@@ -65,6 +72,13 @@ RSpec.describe "Bugs" do
       expect(response).to render_template(:new)
       expect(flash[:alert]).to eq('Bug not added.')
     end
+
+    it 'checks authoriztion for update' do
+      user = build(:user, :developer)
+      sign_in user
+      post project_bugs_path(project), params: { bug: valid_bug_params }
+      expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+    end
   end
 
   describe 'PATCH /bugs/:id/assign' do
@@ -79,6 +93,14 @@ RSpec.describe "Bugs" do
 
       expect(response).to have_http_status(:success)
       expect(flash[:success]).to eq('Bug assigned successfully.')
+    end
+
+    it 'fails to assign the bug' do
+      allow_any_instance_of(Bug).to receive(:update).and_return(false)
+
+      patch assign_bug_path(bug)
+      expect(flash[:alert]).to eq('Bug is not assigned.')
+      expect(response).to redirect_to(projects_path)
     end
   end
 
@@ -98,11 +120,9 @@ RSpec.describe "Bugs" do
 
   describe 'PATCH /bugs/:id/update_status' do
     let(:user) { create(:user, :developer) }
-    let(:new_status) { :resolved }
-    let(:valid_status_params) { { status: new_status } }
 
     it 'updates the bug status' do
-      patch update_status_bug_path(bug), params: { bug: valid_status_params }
+      patch update_status_bug_path(bug), params: { bug: { status: :resolved } }
 
       expect(response).to have_http_status(:redirect)
       expect(response).to redirect_to(projects_path)
@@ -110,6 +130,23 @@ RSpec.describe "Bugs" do
       follow_redirect!
       expect(response).to have_http_status(:success)
       expect(flash[:success]).to eq('Bug status updated successfully.')
+    end
+
+    it 'fails to update bug status' do
+      allow_any_instance_of(Bug).to receive(:update).and_return(false)
+
+      patch update_status_bug_path(bug), params: { bug: { status: :resolved } }
+
+      expect(flash[:alert]).to eq('Failed to update bug status.')
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to render_template(:edit_status)
+    end
+
+    it 'checks authoriztion for update_status' do
+      user = build(:user, :qa)
+      sign_in user
+      patch update_status_bug_path(bug), params: { bug: { status: :resolved } }
+      expect(flash[:alert]).to eq("You are not authorized to perform this action.")
     end
   end
 end
