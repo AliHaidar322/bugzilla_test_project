@@ -52,10 +52,10 @@ RSpec.describe User do
     end
   end
 
-  describe 'scopes' do
-    it 'returns non-manager users except those associated with a specific project' do
-      manager = build(:user, user_type: 'manager')
-      non_manager = create(:user, user_type: 'developer')
+  describe "scopes" do
+    it "returns non-manager users except those associated with a specific project" do
+      manager = build(:user, user_type: "manager")
+      non_manager = create(:user, user_type: "developer")
       project = build(:project)
       project.users << manager
 
@@ -69,7 +69,7 @@ RSpec.describe User do
 
     it "excludes manager users assigned to the project" do
       project = build(:project)
-      user = build(:user, user_type: 'manager')
+      user = build(:user, user_type: "manager")
       create(:user_project, user: user, project: project)
 
       result = described_class.non_manager_users_except_project(project.id)
