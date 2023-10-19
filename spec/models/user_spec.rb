@@ -1,90 +1,92 @@
-# spec/models/user_spec.rb
-
 require 'rails_helper'
 
 RSpec.describe User do
   let(:user) { create(:user) }
 
-  describe "when creating user" do
-    it "validates presence of name" do
-      user = build(:user, name: nil)
-      expect(user.valid?).to be(false)
-      expect(user.errors[:name]).to include("can't be blank")
+  context "Creating a User" do
+    describe "validations" do
+      it "requires the presence of a name" do
+        user = build(:user, name: nil)
+        expect(user.valid?).to be(false)
+        expect(user.errors[:name]).to include("can't be blank")
+      end
+
+      it "allows a user with a name present" do
+        user = build(:user, name: "Not Nil Name")
+        expect(user.valid?).to be(true)
+      end
+
+      it "validates the maximum length of the name" do
+        user = build(:user, name: Faker::Lorem.sentence(word_count: 50))
+        expect(user.valid?).to be(false)
+        expect(user.errors[:name]).to include("is too long (maximum is 50 characters)")
+      end
+
+      it "allows a user with a maximum of 50 letters in their name" do
+        user = build(:user, name: "Ali Haidar")
+        expect(user.valid?).to be(true)
+      end
+
+      it "validates for the presence of user_type" do
+        user = build(:user, user_type: nil)
+        expect(user.valid?).to be(false)
+        expect(user.errors[:user_type]).to include("can't be blank")
+      end
+
+      it "allows a user with user_type present" do
+        user = build(:user, user_type: :manager)
+        expect(user.valid?).to be(true)
+      end
     end
 
-    it "allows a user with name present" do
-      user = build(:user, name: "Not Nil Name")
-      expect(user.valid?).to be(true)
-    end
+    describe "user_type enum" do
+      it "does not allow values other than [:manager, :developer, :qa]" do
+        expect { build(:user, user_type: :invalid) }.to raise_error(ArgumentError)
+          .with_message(/is not a valid user_type/)
+      end
 
-    it "validates maximum length of name" do
-      user = build(:user, name: Faker::Lorem.sentence(word_count: 50))
-      expect(user.valid?).to be(false)
-      expect(user.errors[:name]).to include("is too long (maximum is 50 characters)")
-    end
-
-    it "allows a user having maximum 50 letters" do
-      user = build(:user, name: "Ali Haidar")
-      expect(user.valid?).to be(true)
-    end
-
-    it "validates for presence of user_type" do
-      user = build(:user, user_type: nil)
-      expect(user.valid?).to be(false)
-      expect(user.errors[:user_type]).to include("can't be blank")
-    end
-
-    it "allows a user with user_type present" do
-      user = build(:user, user_type: :manager)
-      expect(user.valid?).to be(true)
+      it "allows values [:manager, :developer, :qa]" do
+        user.user_type = :manager
+        expect(user).to be_valid
+      end
     end
   end
 
-  describe "user_type enum" do
-    it "does not allow values other than [:manager, :developer, :qa]" do
-      expect { build(:user, user_type: :invalid) }.to raise_error(ArgumentError)
-        .with_message(/is not a valid user_type/)
-    end
+  context "Scopes" do
+    describe "non_manager_users_except_project scope" do
+      it "returns non-manager users except those associated with a specific project" do
+        manager = build(:user, user_type: "manager")
+        non_manager = create(:user, user_type: "developer")
+        project = build(:project)
+        project.users << manager
 
-    it "allows values [:manager, :developer, :qa]" do
-      user.user_type = :manager
-      expect(user).to be_valid
-    end
-  end
+        expect(non_manager.projects).not_to include(project)
 
-  describe "scopes" do
-    it "returns non-manager users except those associated with a specific project" do
-      manager = build(:user, user_type: "manager")
-      non_manager = create(:user, user_type: "developer")
-      project = build(:project)
-      project.users << manager
+        users = described_class.non_manager_users_except_project(project.id)
 
-      expect(non_manager.projects).not_to include(project)
+        expect(users).to include(non_manager)
+        expect(users).not_to include(manager)
+      end
 
-      users = described_class.non_manager_users_except_project(project.id)
+      it "excludes manager users assigned to the project" do
+        project = build(:project)
+        user = build(:user, user_type: "manager")
+        create(:user_project, user: user, project: project)
 
-      expect(users).to include(non_manager)
-      expect(users).not_to include(manager)
-    end
+        result = described_class.non_manager_users_except_project(project.id)
 
-    it "excludes manager users assigned to the project" do
-      project = build(:project)
-      user = build(:user, user_type: "manager")
-      create(:user_project, user: user, project: project)
+        expect(result).not_to include(user)
+      end
 
-      result = described_class.non_manager_users_except_project(project.id)
+      it "excludes non-manager users assigned to the project" do
+        project = build(:project)
+        user = build(:user, user_type: :developer)
+        build(:user_project, user: user, project: project)
 
-      expect(result).not_to include(user)
-    end
+        result = described_class.non_manager_users_except_project(project.id)
 
-    it "excludes non-manager users assigned to the project" do
-      project = build(:project)
-      user = build(:user, user_type: :developer)
-      build(:user_project, user: user, project: project)
-
-      result = described_class.non_manager_users_except_project(project.id)
-
-      expect(result).not_to include(user)
+        expect(result).not_to include(user)
+      end
     end
   end
 end

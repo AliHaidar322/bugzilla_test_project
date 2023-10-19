@@ -32,7 +32,7 @@ RSpec.describe "Bugs" do
       expect(response).to redirect_to(new_user_session_path)
       follow_redirect!
       expect(response).to have_http_status(:success)
-      expect(response.body).to render_template("devise/sessions/new")
+      expect(response.body).to render_template("users/sessions/new")
     end
   end
 
@@ -61,7 +61,7 @@ RSpec.describe "Bugs" do
       expect(response).to redirect_to(new_user_session_path)
       follow_redirect!
       expect(response).to have_http_status(:success)
-      expect(response.body).to render_template("devise/sessions/new")
+      expect(response.body).to render_template("users/sessions/new")
     end
 
     it "checks authoriztion for new" do

@@ -18,12 +18,12 @@ class ProjectsController < ApplicationController
   def create
     @project = current_user.projects.build(project_params)
     authorize @project
+    current_user.projects << @project
     if @project.save
-      current_user.projects << @project
       flash[:success] = 'Project created successfully.'
       respond_to do |format|
-        format.html { redirect_to projects_path }
         format.turbo_stream
+        format.html { redirect_to projects_path }
       end
     else
       flash[:alert] = 'There was an error creating the project.'

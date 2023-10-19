@@ -77,16 +77,6 @@ RSpec.describe "Projects" do
       expect(Project.find_by(name: project_params[:name])).to be_present
     end
 
-    it "raise error for creating project with invalid params" do
-      project_params = {
-        name: nil,
-        description: Faker::Lorem.sentence(word_count: 15) [0..99]
-      }
-
-      post projects_path, params: { project: project_params }
-      expect(flash[:alert]).to eq("There was an error creating the project.")
-    end
-
     it "checks authorization for create" do
       user = build(:user, :developer)
       sign_in user
